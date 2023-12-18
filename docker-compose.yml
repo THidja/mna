@@ -1,0 +1,54 @@
+version: "3.4"
+services:
+  cron:
+    image: registry.tahar-hidja.fr/mna/cron:latest
+    container_name: mna-cron
+    environment:
+      - DATABASE_URL=postgresql://admin:password@mna-db/mna
+    networks:
+      - mna
+    restart: unless-stopped
+    depends_on: 
+      - db
+
+  api:
+    image: registry.tahar-hidja.fr/mna/api:latest
+    container_name: mna-api
+    ports:
+      - '8000:8000'
+    environment:
+      - DATABASE_URL=postgresql://admin:password@mna-db/mna
+    networks:
+      - mna
+    restart: unless-stopped
+    depends_on: 
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: mna-db
+    environment:
+      POSTGRES_DB: mna
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    networks:
+      - mna
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
+  front:
+    image: registry.tahar-hidja.fr/mna/front:latest
+    container_name: mna-front
+    environment:
+      API_URL: "http://localhost:8000"
+    ports:
+      - '8082:80'
+    networks:
+      - mna
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  mna:
