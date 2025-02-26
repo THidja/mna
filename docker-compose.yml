@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   cron:
-    image: registry.t-apps.fr/mna/cron:latest
+    image: registry.t-hid.fr/mna/cron:latest
     container_name: mna-cron
     environment:
       - DATABASE_URL=postgresql://admin:password@mna-db/mna
@@ -12,7 +12,7 @@ services:
       - db
 
   api:
-    image: registry.t-apps.fr/mna/api:latest
+    image: registry.t-hid.fr/mna/api:latest
     container_name: mna-api
     ports:
       - '8000:8000'
@@ -37,7 +37,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
   
   front:
-    image: registry.t-apps.fr/mna/front:latest
+    image: registry.t-hid.fr/mna/front:latest
     container_name: mna-front
     environment:
       API_URL: "http://localhost:8000"
